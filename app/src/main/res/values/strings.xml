@@ -1,3 +1,13 @@
-<resources>
-    <string name="app_name">TwitchApp</string>
+   <resources>
+    <string name="app_name">Twitch Analysis</string>
+    <string name="gamesWereFound">Found Games</string>
+    <string name="internetError">There is no internet connection. Please try again.</string>
+    <string name="offline">There is no internet connection. Please try again.</string>
+    <string name="errorWasOcurred">Error communicating with Twitch Server. Please try again</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="action_share">Action share</string>
+    <string name="description">Description</string>
+    <string name="shareOffer">Share game details: </string>
+    <string name="no_games">There are no games.</string>
+    <string name="action_exit">Exit</string>
 </resources>
