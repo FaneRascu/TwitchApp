@@ -7,32 +7,32 @@ import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.controller.component.DaggerTwitchComponent;
+import rascu.stefan.twitchapp.controller.component.DaggerTwitchComponentGames;
 import rascu.stefan.twitchapp.controller.event.request.RequestGamesListEvent;
 import rascu.stefan.twitchapp.controller.event.response.ResponseGamesListEvent;
-import rascu.stefan.twitchapp.controller.module.TwitchModule;
-import rascu.stefan.twitchapp.model.GamesListContent;
-import rascu.stefan.twitchapp.service.TwitchRestClient;
+import rascu.stefan.twitchapp.controller.module.TwitchModuleGames;
+import rascu.stefan.twitchapp.model.games.GamesListContent;
+import rascu.stefan.twitchapp.service.TwitchRestClientGames;
 import rascu.stefan.twitchapp.util.Constant;
 import rascu.stefan.twitchapp.util.GenericUtil;
-import rascu.stefan.twitchapp.controller.component.TwitchComponent;
+import rascu.stefan.twitchapp.controller.component.TwitchComponentGames;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventManager {
+public class EventManagerGames {
 
-    private static EventManager instance;
+    private static EventManagerGames instance;
 
-    private TwitchRestClient restClient;
+    private TwitchRestClientGames restClient;
 
     protected Context context;
 
-    private EventManager() {}
+    private EventManagerGames() {}
 
-    public static EventManager getInstance() {
+    public static EventManagerGames getInstance() {
         if (instance == null) {
-            instance = new EventManager();
+            instance = new EventManagerGames();
         }
 
         return instance;
@@ -44,11 +44,11 @@ public class EventManager {
         }
 
         if (this.restClient == null) {
-            TwitchComponent twitchComponent = DaggerTwitchComponent.builder()
-                    .twitchModule(new TwitchModule())
+            TwitchComponentGames twitchComponentGames = DaggerTwitchComponentGames.builder()
+                    .twitchModuleGames(new TwitchModuleGames())
                     .build();
 
-            this.restClient = twitchComponent.provideTwitchRestClient();
+            this.restClient = twitchComponentGames.provideTwitchRestClient();
         }
 
     }

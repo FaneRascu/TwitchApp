@@ -1,4 +1,4 @@
-package rascu.stefan.twitchapp.model;
+package rascu.stefan.twitchapp.model.games;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

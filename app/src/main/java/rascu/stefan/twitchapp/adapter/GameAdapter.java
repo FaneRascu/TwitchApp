@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import rascu.stefan.twitchapp.model.TopGame;
+import rascu.stefan.twitchapp.model.games.TopGame;
 import rascu.stefan.twitchapp.ui.GameItemView;
 import rascu.stefan.twitchapp.ui.GameItemView_;
 import rascu.stefan.twitchapp.ui.ViewWrapper;

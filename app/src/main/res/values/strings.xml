@@ -1,4 +1,4 @@
-   <resources>
+<resources>
     <string name="app_name">Twitch Analysis</string>
     <string name="gamesWereFound">Found Games</string>
     <string name="internetError">There is no internet connection. Please try again.</string>

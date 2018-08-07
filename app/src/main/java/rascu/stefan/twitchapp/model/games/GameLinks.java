@@ -1,4 +1,4 @@
-package rascu.stefan.twitchapp.model;
+package rascu.stefan.twitchapp.model.games;
 
 public class GameLinks {
 

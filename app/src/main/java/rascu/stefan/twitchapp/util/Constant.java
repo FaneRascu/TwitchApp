@@ -4,13 +4,15 @@ public class Constant {
 
     public static final String BASE_URL = "https://api.twitch.tv/kraken/";
 
-    public static final String ACCEPT_HEADER = "Accept: application/vnd.twitch.v3+json";
+    public static final String ACCEPT_HEADER = "Accept: application/vnd.twitch.v5+json";
 
     public static final String PATH_GAMES = "games/top";
 
-    public static final String Client_ID = "xkpx1ff2owe311sufdja5wcfdiu243";
+    public static final String PATH_STREAMS = "streams/featured";
 
-    //public static final String PATH_GAMES_WITH_PARAMETERS = "games/top?limit={limit}&offset={offset}";
+    public static final String PATH_COMMUNITIES = "communities?name=DallasTesterCommunity";
+
+    public static final String Client_ID = "Client-ID: xkpx1ff2owe311sufdja5wcfdiu243";
 
     public static final String LIMIT_PARAMETER = "limit";
 
@@ -26,7 +28,11 @@ public class Constant {
 
     public static final String CHANNELS = "Number of active channels: %d";
 
-    public static final String VIEWERS = "Views: %d";
+    public static final String FOLLOWERS = "Number of active followers: %d";
+
+    public static final String GAME_NAME = "Currently playing: %s";
+
+    public static final String VIEWERS = "Number of viewers: %d";
 
     public static final int GAME_BOX_MEDIUM_WIDTH = 160;
 

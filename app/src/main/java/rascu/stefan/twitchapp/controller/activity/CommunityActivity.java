@@ -23,12 +23,12 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.model.games.TopGame;
+import rascu.stefan.twitchapp.model.communities.TopCommunity;
 import rascu.stefan.twitchapp.util.Constant;
 
-@EActivity(R.layout.activity_game)
-@OptionsMenu(R.menu.menu_game)
-public class GameActivity extends AppCompatActivity {
+@EActivity(R.layout.activity_community)
+@OptionsMenu(R.menu.menu_community)
+public class CommunityActivity extends AppCompatActivity {
 
     @ViewById
     protected Toolbar toolbar;
@@ -51,7 +51,7 @@ public class GameActivity extends AppCompatActivity {
     private DisplayMetrics metrics;
     private Display display;
 
-    private TopGame topGame;
+    private TopCommunity topCommunity;
 
 
     @AfterViews
@@ -65,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
 
     @OptionsItem(R.id.menuShare)
     protected void onMenuShare() {
-        this.shareGameInformation(topGame);
+        this.shareGameInformation(topCommunity);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +75,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        topGame = (TopGame) this.getIntent().getSerializableExtra(Constant.GAME_INFORMATION);
-        init(topGame);
+        topCommunity = (TopCommunity) this.getIntent().getSerializableExtra(Constant.GAME_INFORMATION);
+        init(topCommunity);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void loadImage(ImageView imageView) {
-        DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this).load(topGame.getGame().getBox().getLarge());
+        DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this).load(topCommunity.getAvatarImageURL());
 
         drawableTypeRequest.placeholder(R.mipmap.ic_placeholder)
                 .override(Constant.GAME_BOX_LARGE_WIDTH, Constant.GAME_BOX_LARGE_HEIGHT)
@@ -102,28 +102,28 @@ public class GameActivity extends AppCompatActivity {
                 .into(imageView);
     }
 
-    private void init(@NonNull TopGame topGame) {
-        if (topGame != null) {
+    private void init(@NonNull TopCommunity topCommunity) {
+        if (topCommunity != null) {
             loadImage(this.contentImageView);
-            this.nameTextView.setText(topGame.getGame().getName());
-            this.channelTextView.setText(String.format(Constant.CHANNELS, topGame.getChannels()));
-            this.viewerTextView.setText(String.format(Constant.VIEWERS, topGame.getViewers()));
-            this.positionTextView.setText(String.format(Constant.POSITION, this.topGame.getPosition()));;
+            this.nameTextView.setText(topCommunity.getName());
+            this.channelTextView.setText(String.format(Constant.CHANNELS, topCommunity.getChannels()));
+            this.viewerTextView.setText(String.format(Constant.VIEWERS, topCommunity.getViewers()));
+            this.positionTextView.setText(String.format(Constant.POSITION, this.topCommunity.getPosition()));;
         }
     }
 
-    private void shareGameInformation(@NonNull TopGame topGame) {
+    private void shareGameInformation(@NonNull TopCommunity topGame) {
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(topGame.getGame().getName())
+        stringBuilder.append(topGame.getName())
                 .append(Constant.LINE_FEED)
                 .append(String.format(Constant.CHANNELS, topGame.getChannels()))
                 .append(Constant.LINE_FEED)
                 .append(String.format(Constant.VIEWERS, topGame.getViewers()))
                 .append(Constant.LINE_FEED)
-                .append(String.format(Constant.POSITION, this.topGame.getPosition()));
+                .append(String.format(Constant.POSITION, this.topCommunity.getPosition()));
 
         intent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
 

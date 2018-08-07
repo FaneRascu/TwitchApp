@@ -16,13 +16,14 @@ import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.controller.activity.GameActivity_;
-import rascu.stefan.twitchapp.model.games.TopGame;
+import rascu.stefan.twitchapp.controller.activity.CommunityActivity;
+import rascu.stefan.twitchapp.controller.activity.CommunityActivity_;
+import rascu.stefan.twitchapp.model.communities.TopCommunity;
 import rascu.stefan.twitchapp.ui.transformation.CircleTransformation;
 import rascu.stefan.twitchapp.util.Constant;
 
-@EViewGroup(R.layout.list_game_item)
-public class GameItemView extends CardView implements View.OnClickListener {
+@EViewGroup(R.layout.list_community_item)
+public class CommunityItemView extends CardView implements View.OnClickListener {
 
     @ViewById
     protected ImageView contentImageView;
@@ -33,20 +34,20 @@ public class GameItemView extends CardView implements View.OnClickListener {
     @ViewById
     protected TextView positionTextView;
 
-    private TopGame topGame;
+    private TopCommunity topCommunity;
 
-    public GameItemView(Context context) {
+    public CommunityItemView(Context context) {
         super(context);
         this.setOnClickListener(this);
     }
 
-    public void bind(final TopGame topGame) {
-        this.topGame = topGame;
+    public void bind(final TopCommunity topCommunity) {
+        this.topCommunity = topCommunity;
         final Resources resources = this.getContext().getResources();
 
         Glide.clear(contentImageView);
 
-        DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this.getContext()).load(topGame.getGame().getBox().getSmall());
+        DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this.getContext()).load(topCommunity.getAvatarImageURL());
 
         drawableTypeRequest.placeholder(R.mipmap.ic_placeholder)
                 .override(Constant.GAME_BOX_MEDIUM_WIDTH, Constant.GAME_BOX_MEDIUM_HEIGHT)
@@ -59,15 +60,15 @@ public class GameItemView extends CardView implements View.OnClickListener {
 
         this.contentImageView.setOnClickListener(this);
 
-        this.nameTextView.setText(this.topGame.getGame().getName());
+        this.nameTextView.setText(this.topCommunity.getName());
 
-        this.positionTextView.setText(String.format(Constant.POSITION, this.topGame.getPosition()));
+        this.positionTextView.setText(String.format(Constant.POSITION, this.topCommunity.getPosition()));
     }
 
     @Override
     public void onClick(View v) {
-        Intent goToGameActivity = new Intent(this.getContext(), GameActivity_.class);
-        goToGameActivity.putExtra(Constant.GAME_INFORMATION, this.topGame);
-        this.getContext().startActivity(goToGameActivity);
+        Intent goToStreamActivity = new Intent(this.getContext(), CommunityActivity_.class);
+        goToStreamActivity.putExtra(Constant.GAME_INFORMATION, this.topCommunity);
+        this.getContext().startActivity(goToStreamActivity);
     }
 }

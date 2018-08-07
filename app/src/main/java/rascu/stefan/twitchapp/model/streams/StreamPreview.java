@@ -1,4 +1,4 @@
-package rascu.stefan.twitchapp.model;
+package rascu.stefan.twitchapp.model.streams;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -8,8 +8,7 @@ import java.io.Serializable;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GameLogo implements Serializable {
-
+public class StreamPreview implements Serializable{
     @JsonProperty("large")
     private String large;
 
@@ -56,7 +55,7 @@ public class GameLogo implements Serializable {
 
     @Override
     public String toString() {
-        return "GameLogo{" +
+        return "StreamPreview{" +
                 "large='" + large + '\'' +
                 ", medium='" + medium + '\'' +
                 ", small='" + small + '\'' +
@@ -69,12 +68,12 @@ public class GameLogo implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GameLogo gameLogo = (GameLogo) o;
+        StreamPreview streamPreview = (StreamPreview) o;
 
-        if (large != null ? !large.equals(gameLogo.large) : gameLogo.large != null) return false;
-        if (medium != null ? !medium.equals(gameLogo.medium) : gameLogo.medium != null) return false;
-        if (small != null ? !small.equals(gameLogo.small) : gameLogo.small != null) return false;
-        return !(template != null ? !template.equals(gameLogo.template) : gameLogo.template != null);
+        if (large != null ? !large.equals(streamPreview.large) : streamPreview.large != null) return false;
+        if (medium != null ? !medium.equals(streamPreview.medium) : streamPreview.medium != null) return false;
+        if (small != null ? !small.equals(streamPreview.small) : streamPreview.small != null) return false;
+        return !(template != null ? !template.equals(streamPreview.template) : streamPreview.template != null);
 
     }
 

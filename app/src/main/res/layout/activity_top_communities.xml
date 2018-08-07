@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".controller.activity.TopCommunitiesActivity">
+
+    <TextView
+        android:id="@+id/foundTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appBarLayout"
+        android:visibility="gone"
+        android:padding="5dip"
+        android:textColor="@color/darkGray"
+        android:background="@color/white"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:elevation="10dip"
+        android:shadowColor="@color/black"
+        android:text="@string/gamesWereFound"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeLayout"
+        android:layout_below="@+id/foundTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/gamesRecyclerView"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="visible"
+        android:indeterminateDrawable="@drawable/progress" >
+    </ProgressBar>
+
+</RelativeLayout>

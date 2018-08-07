@@ -1,6 +1,6 @@
 package rascu.stefan.twitchapp.controller.event.response;
 
-import rascu.stefan.twitchapp.model.GamesListContent;
+import rascu.stefan.twitchapp.model.games.GamesListContent;
 
 public class ResponseGamesListEvent {
 
