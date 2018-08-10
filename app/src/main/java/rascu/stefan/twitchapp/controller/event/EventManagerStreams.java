@@ -5,7 +5,9 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.controller.component.DaggerTwitchComponentStreams;
 import rascu.stefan.twitchapp.controller.component.TwitchComponentStreams;
@@ -52,6 +54,7 @@ public class EventManagerStreams {
 
     }
 
+    @Subscribe
     public void onEvent(final RequestStreamsListEvent event) {
         this.context = event.getContext();
 

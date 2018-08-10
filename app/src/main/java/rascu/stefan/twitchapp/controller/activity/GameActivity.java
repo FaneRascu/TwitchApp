@@ -59,7 +59,7 @@ public class GameActivity extends AppCompatActivity {
         this.metrics = new DisplayMetrics();
         this.display = this.getWindowManager().getDefaultDisplay();
 
-        this.setSupportActionBar(this.toolbar);
+        //this.setSupportActionBar(this.toolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

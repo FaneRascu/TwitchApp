@@ -27,7 +27,9 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.adapter.GameAdapter;
 import rascu.stefan.twitchapp.controller.event.ErrorEvent;
@@ -64,9 +66,12 @@ public class TopGamesActivity extends AppCompatActivity {
 
     @AfterViews
     protected void afterViews() {
+        Log.d("AFTERVIEWS","intra aici");
         Glide.get(this).setMemoryCategory(MemoryCategory.HIGH);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        this.progressBar = findViewById(R.id.progressBar);
 
         this.gamesRecyclerView.setLayoutManager(layoutManager);
         this.gamesRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -92,6 +97,32 @@ public class TopGamesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_topgames);
+        EventManagerGames.getInstance().init();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        this.progressBar = findViewById(R.id.progressBar);
+        this.gamesRecyclerView = findViewById(R.id.gamesRecyclerView);
+        this.gamesRecyclerView.setLayoutManager(layoutManager);
+        this.gamesRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        this.adapter = new GameAdapter(this);
+        this.gamesRecyclerView.setAdapter(this.adapter);
+
+
+        swipeLayout = findViewById(R.id.swipeLayout);
+
+        EventBus.getDefault().register(this);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeLayout.setRefreshing(true);
+                EventBus.getDefault().post(new RequestGamesListEvent(TopGamesActivity.this, 0));
+            }
+        });
+
+        EventBus.getDefault().post(new RequestGamesListEvent(TopGamesActivity.this, 0));
+
     }
 
     @Override
@@ -112,42 +143,61 @@ public class TopGamesActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Subscribe
     public void onEvent(RequestGamesListEvent event) {
         Log.i("TopGamesActivity", "[onEvent]RequestGameListEvent");
     }
 
+    @Subscribe
     public void onEvent(ResponseGamesListEvent event) {
         this.showProgressBar(false);
-        clearAndFillAdapter(event.getGamesListContent().getTop());
+        clearAndFillAdapter(adapter, event.getGamesListContent().getTop());
     }
 
+    @Subscribe
     public void onEvent(final ErrorEvent event) {
         swipeLayout.setRefreshing(false);
         this.showToast(event.getMessage());
     }
 
     @UiThread
-    protected void clearAndFillAdapter(List<TopGame> games) {
+    protected void clearAndFillAdapter(final GameAdapter adapter, final List<TopGame> games) {
         // fill adapter with TopGames
-        swipeLayout.setRefreshing(false);
-        this.adapter.clearAll();
-        this.adapter.addAll(games);
-        this.adapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+                adapter.clearAll();
+                adapter.addAll(games);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     @UiThread
     protected void showToast(String message) {
+
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @UiThread
-    public void showProgressBar(boolean show) {
-        int visibility = show ? View.VISIBLE : View.GONE;
-        this.progressBar.setVisibility(visibility);
+    public void showProgressBar(final boolean show) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                int visibility = show ? View.VISIBLE : View.GONE;
+                findViewById(R.id.progressBar).setVisibility(visibility);
+
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         EventManagerGames.getInstance().destroy();
         super.onDestroy();
     }

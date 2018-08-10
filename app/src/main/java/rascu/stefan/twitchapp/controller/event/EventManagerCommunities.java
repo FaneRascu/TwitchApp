@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.controller.component.DaggerTwitchComponentCommunities;
 import rascu.stefan.twitchapp.controller.component.TwitchComponentCommunities;

@@ -27,7 +27,7 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.adapter.CommunityAdapter;
 import rascu.stefan.twitchapp.controller.event.ErrorEvent;

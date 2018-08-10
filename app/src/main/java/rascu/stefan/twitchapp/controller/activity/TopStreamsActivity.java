@@ -27,11 +27,16 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import rascu.stefan.twitchapp.R;
+import rascu.stefan.twitchapp.adapter.GameAdapter;
 import rascu.stefan.twitchapp.adapter.StreamAdapter;
 import rascu.stefan.twitchapp.controller.event.ErrorEvent;
+import rascu.stefan.twitchapp.controller.event.EventManagerGames;
 import rascu.stefan.twitchapp.controller.event.EventManagerStreams;
+import rascu.stefan.twitchapp.controller.event.request.RequestGamesListEvent;
 import rascu.stefan.twitchapp.controller.event.request.RequestStreamsListEvent;
 import rascu.stefan.twitchapp.controller.event.response.ResponseStreamsListEvent;
 import rascu.stefan.twitchapp.model.streams.TopStreams;
@@ -64,9 +69,12 @@ public class TopStreamsActivity extends AppCompatActivity {
 
     @AfterViews
     protected void afterViews() {
+        Log.d("AFTERVIEWS","intra aici");
         Glide.get(this).setMemoryCategory(MemoryCategory.HIGH);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        this.progressBar = findViewById(R.id.progressBar);
 
         this.gamesRecyclerView.setLayoutManager(layoutManager);
         this.gamesRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -77,11 +85,11 @@ public class TopStreamsActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(true);
-                EventBus.getDefault().post(new RequestStreamsListEvent(TopStreamsActivity.this, 0));
+                EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
             }
         });
 
-        EventBus.getDefault().post(new RequestStreamsListEvent(TopStreamsActivity.this, 0));
+        EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
     }
 
     @OptionsItem(R.id.menuExit)
@@ -92,13 +100,39 @@ public class TopStreamsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_topgames);
+        EventManagerGames.getInstance().init();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        this.progressBar = findViewById(R.id.progressBar);
+        this.gamesRecyclerView = findViewById(R.id.gamesRecyclerView);
+        this.gamesRecyclerView.setLayoutManager(layoutManager);
+        this.gamesRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        this.adapter = new StreamAdapter(this);
+        this.gamesRecyclerView.setAdapter(this.adapter);
+
+
+        swipeLayout = findViewById(R.id.swipeLayout);
+
+        EventBus.getDefault().register(this);
+
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeLayout.setRefreshing(true);
+                EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
+            }
+        });
+
+        EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         if(!EventBus.getDefault().isRegistered(this)) {
-            Log.d("MainActivity", "[onResume]EventBus.register");
+            Log.d("TopStreamsActivity", "[onResume]EventBus.register");
             EventBus.getDefault().register(this);
         }
     }
@@ -106,33 +140,41 @@ public class TopStreamsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         if (EventBus.getDefault().isRegistered(this)) {
-            Log.d("MainActivity", "[onPause]EventBus.unregister");
+            Log.d("TopStreamsActivity", "[onPause]EventBus.unregister");
             EventBus.getDefault().unregister(this);
         }
         super.onPause();
     }
 
+    @Subscribe
     public void onEvent(RequestStreamsListEvent event) {
-        Log.i("MainActivity", "[onEvent]RequestGameListEvent");
+        Log.i("TopStreamsActivity", "[onEvent]RequestGameListEvent");
     }
 
+    @Subscribe
     public void onEvent(ResponseStreamsListEvent event) {
         this.showProgressBar(false);
-        clearAndFillAdapter(event.getStreamsListContent().getFeatured());
+        clearAndFillAdapter(adapter, event.getStreamsListContent().getFeatured());
     }
 
+    @Subscribe
     public void onEvent(final ErrorEvent event) {
         swipeLayout.setRefreshing(false);
         this.showToast(event.getMessage());
     }
 
     @UiThread
-    protected void clearAndFillAdapter(List<TopStreams> streams) {
+    protected void clearAndFillAdapter(final StreamAdapter adapter, final List<TopStreams> streams) {
         // fill adapter with TopGames
-        swipeLayout.setRefreshing(false);
-        this.adapter.clearAll();
-        this.adapter.addAll(streams);
-        this.adapter.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                swipeLayout.setRefreshing(false);
+                adapter.clearAll();
+                adapter.addAll(streams);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @UiThread
@@ -141,13 +183,22 @@ public class TopStreamsActivity extends AppCompatActivity {
     }
 
     @UiThread
-    public void showProgressBar(boolean show) {
-        int visibility = show ? View.VISIBLE : View.GONE;
-        this.progressBar.setVisibility(visibility);
+    public void showProgressBar(final boolean show) {
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                int visibility = show ? View.VISIBLE : View.GONE;
+                findViewById(R.id.progressBar).setVisibility(visibility);
+
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         EventManagerStreams.getInstance().destroy();
         super.onDestroy();
     }
