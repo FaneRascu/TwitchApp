@@ -23,8 +23,8 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.model.streams.TopStreams;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.model.streams.Stream;
+import rascu.stefan.twitchapp.util.Constants;
 
 @EActivity(R.layout.activity_stream)
 @OptionsMenu(R.menu.menu_stream)
@@ -54,7 +54,7 @@ public class StreamActivity extends AppCompatActivity {
     private DisplayMetrics metrics;
     private Display display;
 
-    private TopStreams topStreams;
+    private Stream topStreams;
 
 
     @AfterViews
@@ -62,7 +62,7 @@ public class StreamActivity extends AppCompatActivity {
         this.metrics = new DisplayMetrics();
         this.display = this.getWindowManager().getDefaultDisplay();
 
-        this.setSupportActionBar(this.toolbar);
+        //this.setSupportActionBar(this.toolbar);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -78,7 +78,7 @@ public class StreamActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        topStreams = (TopStreams) this.getIntent().getSerializableExtra(Constant.GAME_INFORMATION);
+        topStreams = (Stream) this.getIntent().getSerializableExtra(Constants.GAME_INFORMATION);
         init(topStreams);
     }
 
@@ -94,10 +94,10 @@ public class StreamActivity extends AppCompatActivity {
     }
 
     private void loadImage(ImageView imageView) {
-        DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this).load(topStreams.getImage());
+        DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this).load(topStreams.getStreamPreview().getLarge());
 
         drawableTypeRequest.placeholder(R.mipmap.ic_placeholder)
-                .override(Constant.GAME_BOX_LARGE_WIDTH, Constant.GAME_BOX_LARGE_HEIGHT)
+                .override(Constants.GAME_BOX_LARGE_WIDTH, Constants.GAME_BOX_LARGE_HEIGHT)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
@@ -105,31 +105,31 @@ public class StreamActivity extends AppCompatActivity {
                 .into(imageView);
     }
 
-    private void init(@NonNull TopStreams topStreams) {
+    private void init(@NonNull Stream topStreams) {
         if (topStreams != null) {
             loadImage(this.contentImageView);
-            this.nameTextView.setText(topStreams.getStream().getChannel().getName());
-            this.gameNameTextView.setText(String.format(Constant.GAME_NAME, topStreams.getStream().getChannel().getGame()));
-            this.channelTextView.setText(String.format(Constant.FOLLOWERS, topStreams.getStream().getChannel().getFollowers()));
-            this.viewerTextView.setText(String.format(Constant.VIEWERS, topStreams.getStream().getViewers()));
-            this.positionTextView.setText(String.format(Constant.POSITION, this.topStreams.getPosition()));;
+            this.nameTextView.setText(topStreams.getChannel().getName());
+            this.gameNameTextView.setText(String.format(Constants.GAME_NAME, topStreams.getChannel().getGame()));
+            this.channelTextView.setText(String.format(Constants.FOLLOWERS, topStreams.getChannel().getFollowers()));
+            this.viewerTextView.setText(String.format(Constants.VIEWERS, topStreams.getViewers()));
+            this.positionTextView.setText(String.format(Constants.POSITION, this.topStreams.getPosition()));;
         }
     }
 
-    private void shareGameInformation(@NonNull TopStreams topStreams) {
+    private void shareGameInformation(@NonNull Stream topStreams) {
         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
         intent.setType("text/plain");
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(topStreams.getStream().getChannel().getName())
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.GAME_NAME, topStreams.getStream().getChannel().getGame()))
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.FOLLOWERS, topStreams.getStream().getChannel().getFollowers()))
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.VIEWERS, topStreams.getStream().getViewers()))
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.POSITION, this.topStreams.getPosition()));
+        stringBuilder.append(topStreams.getChannel().getName())
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.GAME_NAME, topStreams.getChannel().getGame()))
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.FOLLOWERS, topStreams.getChannel().getFollowers()))
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.VIEWERS, topStreams.getViewers()))
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.POSITION, this.topStreams.getPosition()));
 
         intent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
 

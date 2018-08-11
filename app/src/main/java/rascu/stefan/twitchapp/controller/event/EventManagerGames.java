@@ -15,7 +15,7 @@ import rascu.stefan.twitchapp.controller.event.response.ResponseGamesListEvent;
 import rascu.stefan.twitchapp.controller.module.TwitchModuleGames;
 import rascu.stefan.twitchapp.model.games.GamesListContent;
 import rascu.stefan.twitchapp.service.TwitchRestClientGames;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 import rascu.stefan.twitchapp.util.GenericUtil;
 import rascu.stefan.twitchapp.controller.component.TwitchComponentGames;
 import retrofit2.Call;
@@ -65,8 +65,8 @@ public class EventManagerGames {
         }
 
         Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put(Constant.LIMIT_PARAMETER, Constant.DEFAULT_LIMIT);
-        parameters.put(Constant.OFFSET_PARAMETER, String.valueOf(event.getOffset()));
+        parameters.put(Constants.LIMIT_PARAMETER, Constants.DEFAULT_LIMIT);
+        parameters.put(Constants.OFFSET_PARAMETER, String.valueOf(event.getOffset()));
 
         Call<GamesListContent> call = this.restClient.getTopGames(parameters);
         call.enqueue(new Callback<GamesListContent>() {

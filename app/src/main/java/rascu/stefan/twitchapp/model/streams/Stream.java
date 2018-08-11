@@ -40,6 +40,8 @@ public class Stream implements Serializable{
     @JsonProperty("viewers")
     private long viewers;
 
+    int position;
+
     public long getId() {
         return id;
     }
@@ -119,6 +121,15 @@ public class Stream implements Serializable{
     public void setViewers(long viewers) {
         this.viewers = viewers;
     }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
 
     @Override
     public String toString() {

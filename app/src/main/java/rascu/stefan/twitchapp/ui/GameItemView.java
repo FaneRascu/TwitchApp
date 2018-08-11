@@ -19,7 +19,7 @@ import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.controller.activity.GameActivity_;
 import rascu.stefan.twitchapp.model.games.TopGame;
 import rascu.stefan.twitchapp.ui.transformation.CircleTransformation;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 
 @EViewGroup(R.layout.list_game_item)
 public class GameItemView extends CardView implements View.OnClickListener {
@@ -49,7 +49,7 @@ public class GameItemView extends CardView implements View.OnClickListener {
         DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this.getContext()).load(topGame.getGame().getBox().getSmall());
 
         drawableTypeRequest.placeholder(R.mipmap.ic_placeholder)
-                .override(Constant.GAME_BOX_MEDIUM_WIDTH, Constant.GAME_BOX_MEDIUM_HEIGHT)
+                .override(Constants.GAME_BOX_MEDIUM_WIDTH, Constants.GAME_BOX_MEDIUM_HEIGHT)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
@@ -61,13 +61,13 @@ public class GameItemView extends CardView implements View.OnClickListener {
 
         this.nameTextView.setText(this.topGame.getGame().getName());
 
-        this.positionTextView.setText(String.format(Constant.POSITION, this.topGame.getPosition()));
+        this.positionTextView.setText(String.format(Constants.POSITION, this.topGame.getPosition()));
     }
 
     @Override
     public void onClick(View v) {
         Intent goToGameActivity = new Intent(this.getContext(), GameActivity_.class);
-        goToGameActivity.putExtra(Constant.GAME_INFORMATION, this.topGame);
+        goToGameActivity.putExtra(Constants.GAME_INFORMATION, this.topGame);
         this.getContext().startActivity(goToGameActivity);
     }
 }

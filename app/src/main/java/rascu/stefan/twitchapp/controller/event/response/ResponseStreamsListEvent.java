@@ -1,18 +1,18 @@
 package rascu.stefan.twitchapp.controller.event.response;
 
-import rascu.stefan.twitchapp.model.streams.StreamsListContent;
+import rascu.stefan.twitchapp.model.streams.StreamListContent;
 
 public class ResponseStreamsListEvent {
     private int offset;
 
-    private final StreamsListContent streamsListContent;
+    private final StreamListContent streamsListContent;
 
-    public ResponseStreamsListEvent(StreamsListContent streamsListContent, int offset) {
+    public ResponseStreamsListEvent(StreamListContent streamsListContent, int offset) {
         this.streamsListContent = streamsListContent;
         this.offset = offset;
     }
 
-    public StreamsListContent getStreamsListContent() {
+    public StreamListContent getStreamsListContent() {
         return this.streamsListContent;
     }
 
@@ -20,3 +20,4 @@ public class ResponseStreamsListEvent {
         return this.offset;
     }
 }
+

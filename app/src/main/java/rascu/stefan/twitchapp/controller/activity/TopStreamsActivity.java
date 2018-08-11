@@ -24,22 +24,18 @@ import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.OptionsMenuItem;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
-
-import java.util.List;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.adapter.GameAdapter;
 import rascu.stefan.twitchapp.adapter.StreamAdapter;
 import rascu.stefan.twitchapp.controller.event.ErrorEvent;
-import rascu.stefan.twitchapp.controller.event.EventManagerGames;
 import rascu.stefan.twitchapp.controller.event.EventManagerStreams;
-import rascu.stefan.twitchapp.controller.event.request.RequestGamesListEvent;
 import rascu.stefan.twitchapp.controller.event.request.RequestStreamsListEvent;
 import rascu.stefan.twitchapp.controller.event.response.ResponseStreamsListEvent;
-import rascu.stefan.twitchapp.model.streams.TopStreams;
+import rascu.stefan.twitchapp.model.streams.Stream;
 
 @EActivity(R.layout.activity_top_streams)
 @OptionsMenu(R.menu.menu_topstreams)
@@ -85,11 +81,11 @@ public class TopStreamsActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(true);
-                EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
+                EventBus.getDefault().post(new RequestStreamsListEvent(TopStreamsActivity.this, 0));
             }
         });
 
-        EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
+        EventBus.getDefault().post(new RequestStreamsListEvent(TopStreamsActivity.this, 0));
     }
 
     @OptionsItem(R.id.menuExit)
@@ -100,8 +96,8 @@ public class TopStreamsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_topgames);
-        EventManagerGames.getInstance().init();
+        setContentView(R.layout.activity_top_streams);
+        EventManagerStreams.getInstance().init();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.progressBar = findViewById(R.id.progressBar);
@@ -113,18 +109,17 @@ public class TopStreamsActivity extends AppCompatActivity {
 
 
         swipeLayout = findViewById(R.id.swipeLayout);
-
         EventBus.getDefault().register(this);
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(true);
-                EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
+                EventBus.getDefault().post(new RequestStreamsListEvent(TopStreamsActivity.this, 0));
             }
         });
 
-        EventBus.getDefault().post(new RequestGamesListEvent(TopStreamsActivity.this, 0));
+        EventBus.getDefault().post(new RequestStreamsListEvent(TopStreamsActivity.this, 0));
 
     }
 
@@ -148,13 +143,13 @@ public class TopStreamsActivity extends AppCompatActivity {
 
     @Subscribe
     public void onEvent(RequestStreamsListEvent event) {
-        Log.i("TopStreamsActivity", "[onEvent]RequestGameListEvent");
+        Log.i("TopStreamsActivity", "[onEvent]RequestStreamsListEvent");
     }
 
     @Subscribe
     public void onEvent(ResponseStreamsListEvent event) {
         this.showProgressBar(false);
-        clearAndFillAdapter(adapter, event.getStreamsListContent().getFeatured());
+        clearAndFillAdapter(adapter, event.getStreamsListContent().getStreams());
     }
 
     @Subscribe
@@ -164,8 +159,8 @@ public class TopStreamsActivity extends AppCompatActivity {
     }
 
     @UiThread
-    protected void clearAndFillAdapter(final StreamAdapter adapter, final List<TopStreams> streams) {
-        // fill adapter with TopGames
+    protected void clearAndFillAdapter(final StreamAdapter adapter, final List<Stream> streams) {
+        // fill adapter with TopStreams
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -175,10 +170,12 @@ public class TopStreamsActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+
     }
 
     @UiThread
     protected void showToast(String message) {
+
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

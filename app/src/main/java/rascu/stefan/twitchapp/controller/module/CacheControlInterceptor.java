@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import okhttp3.Interceptor;
 import okhttp3.Response;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 
 public class CacheControlInterceptor implements Interceptor {
 
@@ -25,12 +25,12 @@ public class CacheControlInterceptor implements Interceptor {
         // online response
         Response originalResponse = chain.proceed(chain.request());
         return originalResponse.newBuilder()
-                .header("Cache-Control", "public, max-age=" + Constant.MAX_AGE)
+                .header("Cache-Control", "public, max-age=" + Constants.MAX_AGE)
                 .build();
         /*
             // offline response
             return originalResponse.newBuilder()
-                    .header("Cache-Control", "public, only-if-cached, max-stale=" + Constant.MAX_STALE)
+                    .header("Cache-Control", "public, only-if-cached, max-stale=" + Constants.MAX_STALE)
                     .build();
         */
     }

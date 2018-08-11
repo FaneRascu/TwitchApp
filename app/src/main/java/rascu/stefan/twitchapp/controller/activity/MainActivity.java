@@ -1,6 +1,5 @@
 package rascu.stefan.twitchapp.controller.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.ui.GameItemView;
 
 @EActivity(R.layout.activity_main)
 @OptionsMenu(R.menu.menu_main)
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
                 Log.d("ore merge?", "da bineintazles");
-                Intent intent = new Intent(MainActivity.this, TopFeaturedStreams.class);
+                Intent intent = new Intent(MainActivity.this, TopFeaturedStreamsActivity.class);
                 MainActivity.this.startActivity(intent);
             }
         });

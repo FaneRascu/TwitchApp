@@ -1,6 +1,6 @@
 package rascu.stefan.twitchapp.util;
 
-public class Constant {
+public class Constants {
 
     public static final String BASE_URL = "https://api.twitch.tv/kraken/";
 
@@ -8,7 +8,9 @@ public class Constant {
 
     public static final String PATH_GAMES = "games/top";
 
-    public static final String PATH_STREAMS = "streams/featured";
+    public static final String PATH_STREAMS = "streams";
+
+    public static final String PATH_FEATURED_STREAMS = "streams/featured";
 
     public static final String PATH_COMMUNITIES = "communities?name=DallasTesterCommunity";
 

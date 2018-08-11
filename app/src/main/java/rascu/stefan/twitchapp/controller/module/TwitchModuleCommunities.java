@@ -10,7 +10,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rascu.stefan.twitchapp.service.TwitchRestClientCommunities;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -25,7 +25,7 @@ public class TwitchModuleCommunities {
         // TODO implementar o tratamento offline usando cache em disco atraves do OkHttpClient
         // handle cache response
         File httpCacheDirectory = new File(context.getCacheDir(), "responses");
-        Cache cache = new Cache(httpCacheDirectory, Constant.CACHE_SIZE);
+        Cache cache = new Cache(httpCacheDirectory, Constants.CACHE_SIZE);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
@@ -42,7 +42,7 @@ public class TwitchModuleCommunities {
         Executor executor = Executors.newCachedThreadPool();
 
         return new Retrofit.Builder()
-                .baseUrl(Constant.BASE_URL)
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .callbackExecutor(executor)
                 .client(client)

@@ -31,25 +31,18 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.adapter.CommunityAdapter;
-
+import rascu.stefan.twitchapp.adapter.FeaturedStreamAdapter;
 import rascu.stefan.twitchapp.controller.event.ErrorEvent;
-import rascu.stefan.twitchapp.controller.event.EventManagerCommunities;
+import rascu.stefan.twitchapp.controller.event.EventManagerFeaturedStreams;
+import rascu.stefan.twitchapp.controller.event.request.RequestFeaturedStreamsListEvent;
+import rascu.stefan.twitchapp.controller.event.response.ResponseFeaturedStreamsListEvent;
+import rascu.stefan.twitchapp.model.streams.TopStreams;
 
-import rascu.stefan.twitchapp.controller.event.request.RequestCommunitiesListEvent;
+@EActivity(R.layout.activity_top_featured_streams)
+@OptionsMenu(R.menu.menu_topstreams)
+public class TopFeaturedStreamsActivity extends AppCompatActivity {
 
-import rascu.stefan.twitchapp.controller.event.response.ResponseCommunitiesListEvent;
-
-import rascu.stefan.twitchapp.controller.event.response.ResponseStreamsListEvent;
-import rascu.stefan.twitchapp.model.communities.TopCommunity;
-
-
-
-@EActivity(R.layout.activity_top_communities)
-@OptionsMenu(R.menu.menu_topcommunity)
-public class TopCommunitiesActivity extends AppCompatActivity {
-
-    private CommunityAdapter adapter;
+    private FeaturedStreamAdapter adapter;
 
     @ViewById
     protected ProgressBar progressBar;
@@ -68,7 +61,7 @@ public class TopCommunitiesActivity extends AppCompatActivity {
 
     @AfterInject
     protected void afterInjected() {
-        EventManagerCommunities.getInstance().init();
+        EventManagerFeaturedStreams.getInstance().init();
     }
 
     @AfterViews
@@ -82,18 +75,18 @@ public class TopCommunitiesActivity extends AppCompatActivity {
 
         this.gamesRecyclerView.setLayoutManager(layoutManager);
         this.gamesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        this.adapter = new CommunityAdapter(this);
+        this.adapter = new FeaturedStreamAdapter(this);
         this.gamesRecyclerView.setAdapter(this.adapter);
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(true);
-                EventBus.getDefault().post(new RequestCommunitiesListEvent(TopCommunitiesActivity.this, 0));
+                EventBus.getDefault().post(new RequestFeaturedStreamsListEvent(TopFeaturedStreamsActivity.this, 0));
             }
         });
 
-        EventBus.getDefault().post(new RequestCommunitiesListEvent(TopCommunitiesActivity.this, 0));
+        EventBus.getDefault().post(new RequestFeaturedStreamsListEvent(TopFeaturedStreamsActivity.this, 0));
     }
 
     @OptionsItem(R.id.menuExit)
@@ -104,31 +97,30 @@ public class TopCommunitiesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_topgames);
-        EventManagerCommunities.getInstance().init();
+        setContentView(R.layout.activity_top_featured_streams);
+        EventManagerFeaturedStreams.getInstance().init();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         this.progressBar = findViewById(R.id.progressBar);
         this.gamesRecyclerView = findViewById(R.id.gamesRecyclerView);
         this.gamesRecyclerView.setLayoutManager(layoutManager);
         this.gamesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        this.adapter = new CommunityAdapter(this);
+        this.adapter = new FeaturedStreamAdapter(this);
         this.gamesRecyclerView.setAdapter(this.adapter);
 
 
         swipeLayout = findViewById(R.id.swipeLayout);
-
         EventBus.getDefault().register(this);
 
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeLayout.setRefreshing(true);
-                EventBus.getDefault().post(new RequestCommunitiesListEvent(TopCommunitiesActivity.this, 0));
+                EventBus.getDefault().post(new RequestFeaturedStreamsListEvent(TopFeaturedStreamsActivity.this, 0));
             }
         });
 
-        EventBus.getDefault().post(new RequestCommunitiesListEvent(TopCommunitiesActivity.this, 0));
+        EventBus.getDefault().post(new RequestFeaturedStreamsListEvent(TopFeaturedStreamsActivity.this, 0));
 
     }
 
@@ -136,7 +128,7 @@ public class TopCommunitiesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if(!EventBus.getDefault().isRegistered(this)) {
-            Log.d("TopCommunitiesActivity", "[onResume]EventBus.register");
+            Log.d("TopFeaturedStreamsAct", "[onResume]EventBus.register");
             EventBus.getDefault().register(this);
         }
     }
@@ -144,21 +136,21 @@ public class TopCommunitiesActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         if (EventBus.getDefault().isRegistered(this)) {
-            Log.d("TopCommunitiesActivity", "[onPause]EventBus.unregister");
+            Log.d("TopFeaturedStreamsAct", "[onPause]EventBus.unregister");
             EventBus.getDefault().unregister(this);
         }
         super.onPause();
     }
 
     @Subscribe
-    public void onEvent(RequestCommunitiesListEvent event) {
-        Log.i("TopCommunitiesActivity", "[onEvent]RequestCommunitiesListEvent");
+    public void onEvent(RequestFeaturedStreamsListEvent event) {
+        Log.i("TopFeaturedStreamsAct", "[onEvent]RequestFeaturedStreamsListEvent");
     }
 
     @Subscribe
-    public void onEvent(ResponseCommunitiesListEvent event) {
+    public void onEvent(ResponseFeaturedStreamsListEvent event) {
         this.showProgressBar(false);
-        clearAndFillAdapter(adapter, event.getCommunityListContent().getCommunities());
+        clearAndFillAdapter(adapter, event.getFeaturedStreamsListContent().getFeatured());
     }
 
     @Subscribe
@@ -168,14 +160,14 @@ public class TopCommunitiesActivity extends AppCompatActivity {
     }
 
     @UiThread
-    protected void clearAndFillAdapter(final CommunityAdapter adapter, final List<TopCommunity> topCommunities) {
-        // fill adapter with TopGames
+    protected void clearAndFillAdapter(final FeaturedStreamAdapter adapter, final List<TopStreams> streams) {
+        // fill adapter with TopStreams
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 swipeLayout.setRefreshing(false);
                 adapter.clearAll();
-                adapter.addAll(topCommunities);
+                adapter.addAll(streams);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -205,7 +197,7 @@ public class TopCommunitiesActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
-        EventManagerCommunities.getInstance().destroy();
+        EventManagerFeaturedStreams.getInstance().destroy();
         super.onDestroy();
     }
 

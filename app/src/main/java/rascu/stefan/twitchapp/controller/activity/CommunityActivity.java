@@ -24,7 +24,7 @@ import org.androidannotations.annotations.ViewById;
 
 import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.model.communities.TopCommunity;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 
 @EActivity(R.layout.activity_community)
 @OptionsMenu(R.menu.menu_community)
@@ -75,7 +75,7 @@ public class CommunityActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        topCommunity = (TopCommunity) this.getIntent().getSerializableExtra(Constant.GAME_INFORMATION);
+        topCommunity = (TopCommunity) this.getIntent().getSerializableExtra(Constants.GAME_INFORMATION);
         init(topCommunity);
     }
 
@@ -94,7 +94,7 @@ public class CommunityActivity extends AppCompatActivity {
         DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this).load(topCommunity.getAvatarImageURL());
 
         drawableTypeRequest.placeholder(R.mipmap.ic_placeholder)
-                .override(Constant.GAME_BOX_LARGE_WIDTH, Constant.GAME_BOX_LARGE_HEIGHT)
+                .override(Constants.GAME_BOX_LARGE_WIDTH, Constants.GAME_BOX_LARGE_HEIGHT)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
@@ -106,9 +106,9 @@ public class CommunityActivity extends AppCompatActivity {
         if (topCommunity != null) {
             loadImage(this.contentImageView);
             this.nameTextView.setText(topCommunity.getName());
-            this.channelTextView.setText(String.format(Constant.CHANNELS, topCommunity.getChannels()));
-            this.viewerTextView.setText(String.format(Constant.VIEWERS, topCommunity.getViewers()));
-            this.positionTextView.setText(String.format(Constant.POSITION, this.topCommunity.getPosition()));;
+            this.channelTextView.setText(String.format(Constants.CHANNELS, topCommunity.getChannels()));
+            this.viewerTextView.setText(String.format(Constants.VIEWERS, topCommunity.getViewers()));
+            this.positionTextView.setText(String.format(Constants.POSITION, this.topCommunity.getPosition()));;
         }
     }
 
@@ -118,12 +118,12 @@ public class CommunityActivity extends AppCompatActivity {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(topGame.getName())
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.CHANNELS, topGame.getChannels()))
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.VIEWERS, topGame.getViewers()))
-                .append(Constant.LINE_FEED)
-                .append(String.format(Constant.POSITION, this.topCommunity.getPosition()));
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.CHANNELS, topGame.getChannels()))
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.VIEWERS, topGame.getViewers()))
+                .append(Constants.LINE_FEED)
+                .append(String.format(Constants.POSITION, this.topCommunity.getPosition()));
 
         intent.putExtra(Intent.EXTRA_TEXT, stringBuilder.toString());
 

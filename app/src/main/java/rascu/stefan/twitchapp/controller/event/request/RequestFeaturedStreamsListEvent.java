@@ -2,12 +2,13 @@ package rascu.stefan.twitchapp.controller.event.request;
 
 import android.content.Context;
 
-public class RequestStreamsListEvent {
+public class RequestFeaturedStreamsListEvent {
+
     private final Context context;
 
     private final int offset;
 
-    public RequestStreamsListEvent(Context context, int offset) {
+    public RequestFeaturedStreamsListEvent(Context context, int offset) {
         this.context = context;
         this.offset = offset;
     }

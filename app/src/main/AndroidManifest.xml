@@ -47,9 +47,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controller.activity.MainActivity" />
         </activity>
-
         <activity
-            android:name=".controller.activity.TopStreamsActivity_"
+            android:name=".controller.activity.TopFeaturedStreamsActivity_"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
@@ -58,6 +57,30 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controller.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".controller.activity.TopFeaturedStreamsActivity"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".controller.activity.MainActivity" />
+        </activity>
+
+        <activity
+         android:name=".controller.activity.TopStreamsActivity_"
+         android:configChanges="orientation|screenSize"
+         android:label="@string/app_name"
+         android:theme="@style/AppTheme.NoActionBar">
+
+
+         <!-- Parent activity meta-data to support 4.0 and lower -->
+         <meta-data
+         android:name="android.support.PARENT_ACTIVITY"
+         android:value=".controller.activity.MainActivity" />
         </activity>
         <activity
             android:name=".controller.activity.TopStreamsActivity"
@@ -65,28 +88,6 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".controller.activity.MainActivity" />
-        </activity>
-
-        <!--<activity-->
-            <!--android:name=".controller.activity.TopFeaturedStreams_"-->
-            <!--android:configChanges="orientation|screenSize"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:theme="@style/AppTheme.NoActionBar">-->
-
-            <!--&lt;!&ndash; Parent activity meta-data to support 4.0 and lower &ndash;&gt;-->
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".controller.activity.MainActivity" />-->
-        <!--</activity>-->
-        <activity
-            android:name=".controller.activity.TopFeaturedStreams"
-            android:configChanges="orientation|screenSize"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
@@ -116,11 +117,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".controller.activity.MainActivity" />
         </activity>
-
         <activity android:name=".controller.activity.CommunityActivity_" />
-        <activity android:name=".controller.activity.StreamActivity_" />
+        <activity android:name=".controller.activity.CommunityActivity" />
+
+        <activity android:name=".controller.activity.FeaturedStreamActivity_" />
+        <activity android:name=".controller.activity.FeaturedStreamActivity" />
+
         <activity android:name=".controller.activity.GameActivity_" />
         <activity android:name=".controller.activity.GameActivity" />
+
+        <activity android:name=".controller.activity.StreamActivity_"></activity>
+        <activity android:name=".controller.activity.StreamActivity"></activity>
     </application>
 
 </manifest>

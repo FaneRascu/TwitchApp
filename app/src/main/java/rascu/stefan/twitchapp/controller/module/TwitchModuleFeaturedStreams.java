@@ -9,17 +9,16 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
-import rascu.stefan.twitchapp.service.TwitchRestClientGames;
+import rascu.stefan.twitchapp.service.TwitchRestClientFeaturedStreams;
 import rascu.stefan.twitchapp.util.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 @Module
-public class TwitchModuleGames {
-
+public class TwitchModuleFeaturedStreams {
     @Provides
     @Singleton
-    TwitchRestClientGames provideTwitchRestClient() {
+    TwitchRestClientFeaturedStreams provideTwitchRestClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
 
 /*
@@ -48,7 +47,7 @@ public class TwitchModuleGames {
                 .callbackExecutor(executor)
                 .client(client)
                 .build()
-                .create(TwitchRestClientGames.class);
+                .create(TwitchRestClientFeaturedStreams.class);
     }
 
 

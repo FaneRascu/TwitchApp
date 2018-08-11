@@ -16,11 +16,10 @@ import org.androidannotations.annotations.EViewGroup;
 import org.androidannotations.annotations.ViewById;
 
 import rascu.stefan.twitchapp.R;
-import rascu.stefan.twitchapp.controller.activity.CommunityActivity;
 import rascu.stefan.twitchapp.controller.activity.CommunityActivity_;
 import rascu.stefan.twitchapp.model.communities.TopCommunity;
 import rascu.stefan.twitchapp.ui.transformation.CircleTransformation;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 
 @EViewGroup(R.layout.list_community_item)
 public class CommunityItemView extends CardView implements View.OnClickListener {
@@ -50,7 +49,7 @@ public class CommunityItemView extends CardView implements View.OnClickListener 
         DrawableTypeRequest<String> drawableTypeRequest = Glide.with(this.getContext()).load(topCommunity.getAvatarImageURL());
 
         drawableTypeRequest.placeholder(R.mipmap.ic_placeholder)
-                .override(Constant.GAME_BOX_MEDIUM_WIDTH, Constant.GAME_BOX_MEDIUM_HEIGHT)
+                .override(Constants.GAME_BOX_MEDIUM_WIDTH, Constants.GAME_BOX_MEDIUM_HEIGHT)
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
@@ -62,13 +61,13 @@ public class CommunityItemView extends CardView implements View.OnClickListener 
 
         this.nameTextView.setText(this.topCommunity.getName());
 
-        this.positionTextView.setText(String.format(Constant.POSITION, this.topCommunity.getPosition()));
+        this.positionTextView.setText(String.format(Constants.POSITION, this.topCommunity.getPosition()));
     }
 
     @Override
     public void onClick(View v) {
         Intent goToStreamActivity = new Intent(this.getContext(), CommunityActivity_.class);
-        goToStreamActivity.putExtra(Constant.GAME_INFORMATION, this.topCommunity);
+        goToStreamActivity.putExtra(Constants.GAME_INFORMATION, this.topCommunity);
         this.getContext().startActivity(goToStreamActivity);
     }
 }

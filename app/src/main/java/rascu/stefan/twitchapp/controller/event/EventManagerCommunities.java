@@ -6,15 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import rascu.stefan.twitchapp.R;
 import rascu.stefan.twitchapp.controller.component.DaggerTwitchComponentCommunities;
+
 import rascu.stefan.twitchapp.controller.component.TwitchComponentCommunities;
+
 import rascu.stefan.twitchapp.controller.event.request.RequestCommunitiesListEvent;
+
 import rascu.stefan.twitchapp.controller.event.response.ResponseCommunitiesListEvent;
+
 import rascu.stefan.twitchapp.controller.module.TwitchModuleCommunities;
+
 import rascu.stefan.twitchapp.model.communities.CommunityListContent;
+
 import rascu.stefan.twitchapp.service.TwitchRestClientCommunities;
-import rascu.stefan.twitchapp.util.Constant;
+
+import rascu.stefan.twitchapp.util.Constants;
 import rascu.stefan.twitchapp.util.GenericUtil;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,15 +53,16 @@ public class EventManagerCommunities {
         }
 
         if (this.restClient == null) {
-            TwitchComponentCommunities twitchComponentCommunities = DaggerTwitchComponentCommunities.builder()
+            TwitchComponentCommunities twitchComponentGames = DaggerTwitchComponentCommunities.builder()
                     .twitchModuleCommunities(new TwitchModuleCommunities())
                     .build();
 
-            this.restClient = twitchComponentCommunities.provideTwitchRestClient();
+            this.restClient = twitchComponentGames.provideTwitchRestClient();
         }
 
     }
 
+    @Subscribe
     public void onEvent(final RequestCommunitiesListEvent event) {
         this.context = event.getContext();
 
@@ -62,7 +72,8 @@ public class EventManagerCommunities {
         }
 
         Map<String, String> parameters = new HashMap<String, String>();
-//        parameters.put(Constant.LIMIT_PARAMETER, Constant.DEFAULT_LIMIT);
+//        parameters.put(Constants.LIMIT_PARAMETER, Constants.DEFAULT_LIMIT);
+//        parameters.put(Constants.OFFSET_PARAMETER, String.valueOf(event.getOffset()));
 
         Call<CommunityListContent> call = this.restClient.getTopCommunities(parameters);
         call.enqueue(new Callback<CommunityListContent>() {
@@ -87,3 +98,4 @@ public class EventManagerCommunities {
         EventBus.getDefault().unregister(this);
     }
 }
+

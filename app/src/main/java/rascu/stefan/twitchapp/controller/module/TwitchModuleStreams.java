@@ -10,7 +10,7 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import rascu.stefan.twitchapp.service.TwitchRestClientStreams;
-import rascu.stefan.twitchapp.util.Constant;
+import rascu.stefan.twitchapp.util.Constants;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
@@ -42,7 +42,7 @@ public class TwitchModuleStreams {
         Executor executor = Executors.newCachedThreadPool();
 
         return new Retrofit.Builder()
-                .baseUrl(Constant.BASE_URL)
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .callbackExecutor(executor)
                 .client(client)
